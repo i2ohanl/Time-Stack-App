@@ -34,41 +34,36 @@ class TimeStackState extends State<TimeStack> {
   getData() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     if(prefs.getInt('prevDate') == null) {
-      prefs.setInt('dailyTotalPos', 0);
-      prefs.setInt('dailyTotalNeg', 0);
-      prefs.setInt('productive', 0);
-      prefs.setInt('unproductive', 0);
+      prefs.setDouble('dailyTotalPos', 0);
+      prefs.setDouble('dailyTotalNeg', 0);
+      prefs.setDouble('productive', 0);
+      prefs.setDouble('unproductive', 0);
       prefs.setInt('prevDate', currDate);
     }
     setState(() {
       prevDate = prefs.getInt('prevDate');
       if(prevDate == currDate) {
-        dailyTotalNeg = dailyTotalPos = unproductive = producitve = 0;
-        prefs.setInt('dailyTotalPos', 0);
-        prefs.setInt('dailyTotalNeg', 0);
-        prefs.setInt('productive', 0);
-        prefs.setInt('unproductive', 0);
+        dailyTotalNeg = dailyTotalPos = unproductive = producitve = 0.0;
+        prefs.setDouble('dailyTotalPos', 0.0);
+        prefs.setDouble('dailyTotalNeg', 0.0);
+        prefs.setDouble('productive', 0.0);
+        prefs.setDouble('unproductive', 0.0);
         prefs.setInt('prevDate', currDate);
       } else {
-        dailyTotalPos = prefs.getInt('dailyTotalPos');
-        dailyTotalNeg = prefs.getInt('dailyTotalNeg');
-        producitve = prefs.getInt('productive');
-        unproductive = prefs.getInt('unproductive');
-      }
-      if(producitve == null) {
-        print('Null');
-      } else {
-        print(producitve.toString());
+        dailyTotalPos = prefs.getDouble('dailyTotalPos');
+        dailyTotalNeg = prefs.getDouble('dailyTotalNeg');
+        producitve = prefs.getDouble('productive');
+        unproductive = prefs.getDouble('unproductive');
       }
     });
   }
 
   setData() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
-    prefs.setInt('dailyTotalPos', dailyTotalPos);
-    prefs.setInt('dailyTotalNeg', dailyTotalNeg);
-    prefs.setInt('productive', producitve);
-    prefs.setInt('unproductive', unproductive);
+    prefs.setDouble('dailyTotalPos', dailyTotalPos);
+    prefs.setDouble('dailyTotalNeg', dailyTotalNeg);
+    prefs.setDouble('productive', producitve);
+    prefs.setDouble('unproductive', unproductive);
   }
   //Checks for first boot, prevDate set to null if so
   //if prev date same as curr date (data still of current date) retrive info as is
@@ -94,7 +89,6 @@ class TimeStackState extends State<TimeStack> {
       dayDisplay = '$dayDisplay$month\n';
     }
     if(producitve!=null){
-    // ignore: sized_box_for_whitespace
     print('Productive: '+producitve.toString());
     if(unproductive!=null){
       print('unProductive: '+unproductive.toString());
@@ -118,13 +112,13 @@ class TimeStackState extends State<TimeStack> {
                   Positioned(
                     top: height/2,
                     left: ((width*11/20)/2) - 55,
-                    child: Square(color: Colors.blue.shade100, height: (dailyTotalNeg*10).toDouble(), width: 100.0,),
+                    child: Square(color: Colors.blue.shade100, height: (dailyTotalNeg*25).toDouble(), width: 100.0,),
                   ),
                   //set_________________________________________________________
                   Positioned(
                     top: height/2,
                     left: ((width*11/20)/2) - 55,
-                    child: Square(color: Colors.blue, height: (unproductive*10).toDouble(), width: 100.0,),
+                    child: Square(color: Colors.blue, height: (unproductive*25).toDouble(), width: 100.0,),
                   ),
                   //set_________________________________________________________
                   Positioned(
@@ -132,20 +126,23 @@ class TimeStackState extends State<TimeStack> {
                     left: ((width*11/20)/2) - 80,
                     child: const Square(color: Colors.black, height: 1.0, width: 150.0,),
                   ),
+                  //set_________________________________________________________
                   Positioned(
                     top: height/2 - 250,
                     left: ((width*11/20)/2) - 55,
                     child: const Square(color: Colors.orange, height: max , width: 100.0,),
                   ),
+                  //set_________________________________________________________
                   Positioned(
                     top: height/2 - 250,
                     left: ((width*11/20)/2) - 55,
-                    child: Square(color: Colors.orange[200], height: max - (producitve*10).toDouble(), width: 100.0,),
+                    child: Square(color: Colors.orange[200], height: max - (producitve*25).toDouble(), width: 100.0,),
                   ),
+                  //set_________________________________________________________
                   Positioned(
                    top: height/2 -250,
                    left: ((width*11/20)/2) - 55,
-                   child: Square(color: Colors.white, height: max - (dailyTotalPos*10).toDouble(), width: 100.0,),
+                   child: Square(color: Colors.white, height: max - (dailyTotalPos*25).toDouble(), width: 100.0,),
                   ),
                   //set_________________________________________________________
                   Positioned(
@@ -190,16 +187,45 @@ class TimeStackState extends State<TimeStack> {
                           if(unproductive > 0) {
                             unproductive = unproductive - 1;
                           } else {
+                            if (producitve >= 9.5) {
+                              producitve = 10.0;
+                            } else {
                             producitve = producitve + 1;
+                            }
                           }
-                          dailyTotalPos = dailyTotalPos + 1;
+                          if (dailyTotalPos>=9.5) {
+                            dailyTotalPos = 10.0;
+                          } else {
+                            dailyTotalPos = dailyTotalPos + 1;
+                          }
                           setData();
                         });
                       },
                       child: const Icon(Icons.add, color: Colors.orange,),
                     ),
                   ),
-
+                  Positioned(
+                    top: 200.0,
+                    left: 100.0,
+                    child: ElevatedButton(
+                      onPressed: () {
+                        setState(() {
+                          if(unproductive > 0) {
+                            unproductive = unproductive - 0.5;
+                          } else {
+                            if (producitve<10) {
+                              producitve = producitve + 0.5;
+                            }
+                          }
+                          if (dailyTotalPos<10) {
+                            dailyTotalPos = dailyTotalPos + 0.5;
+                          }
+                          setData();
+                        });
+                      },
+                      child: const Icon(Icons.add, color: Colors.orange,),
+                    ),
+                  ),
                   //Increase unproductive button
                   Positioned(
                     top: 300.0,
@@ -209,15 +235,46 @@ class TimeStackState extends State<TimeStack> {
                           if(producitve > 0) {
                             producitve = producitve - 1;
                           } else {
-                            unproductive = unproductive + 1;
+                            if (unproductive >= 9.5) {
+                              unproductive = 10.0;
+                            } else {
+                              unproductive = unproductive + 1;
+                            }
                           }
-                          dailyTotalNeg = dailyTotalNeg + 1;
+                          if (dailyTotalNeg >= 9.5) {
+                            dailyTotalNeg = 10.0;
+                          } else {
+                            dailyTotalNeg = dailyTotalNeg + 1;
+                          }
                           setData();
                         });
                       },
                       child: Icon(Icons.add, color: Colors.blue,),
                     ),
                   ),
+                  Positioned(
+                    top: 300.0,
+                    left: 100.0,
+                    child: ElevatedButton(
+                      onPressed: () {
+                        setState(() {
+                          if(producitve>0) {
+                            producitve = producitve - 0.5;
+                          } else {
+                            if (unproductive<10) {
+                              unproductive = unproductive + 0.5;
+                            }
+                          }
+                          if (dailyTotalNeg<10) {
+                            dailyTotalNeg = dailyTotalNeg + 0.5;
+                          }
+                          setData();
+                        });
+                      },
+                      child: Icon(Icons.add, color: Colors.blue,),
+                    ),
+                  ),
+                
                 ],
               )
             ),
