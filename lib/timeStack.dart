@@ -42,7 +42,7 @@ class TimeStackState extends State<TimeStack> {
     }
     setState(() {
       prevDate = prefs.getInt('prevDate');
-      if(prevDate != currDate) {
+      if(prevDate == currDate) {
         dailyTotalNeg = dailyTotalPos = unproductive = producitve = 0;
         prefs.setInt('dailyTotalPos', 0);
         prefs.setInt('dailyTotalNeg', 0);
@@ -95,7 +95,7 @@ class TimeStackState extends State<TimeStack> {
     }
     if(producitve!=null){
     // ignore: sized_box_for_whitespace
-    print('Productive not null');
+    print('Productive not null: '+producitve.toString());
     if(unproductive!=null){
       print('unProductive not null: '+unproductive.toString());
     }else{
@@ -115,12 +115,12 @@ class TimeStackState extends State<TimeStack> {
                   Positioned(
                     top: height/2,
                     left: ((width*11/20)/2) - 55,
-                    child: Square(color: Colors.blue.shade100, height: 250.0, width: 100.0,),
+                    child: Square(color: Colors.blue.shade100, height: (dailyTotalNeg*10).toDouble(), width: 100.0,),
                   ),
                   Positioned(
                     top: height/2,
                     left: ((width*11/20)/2) - 55,
-                    child: Square(color: Colors.blue, height: (producitve*10).toDouble(), width: 100.0,),
+                    child: Square(color: Colors.blue, height: (unproductive*10).toDouble(), width: 100.0,),
                   ),
                   Positioned(
                     top: height/2,
@@ -173,6 +173,8 @@ class TimeStackState extends State<TimeStack> {
                       ]
                     ),
                   ),
+
+                  //Increase productive button
                   Positioned(
                     top: 200.0,
                     child: ElevatedButton(
@@ -190,12 +192,14 @@ class TimeStackState extends State<TimeStack> {
                       child: const Icon(Icons.add, color: Colors.orange,),
                     ),
                   ),
+
+                  //Increase unproductive button
                   Positioned(
                     top: 300.0,
                     child: ElevatedButton(
                       onPressed: () {
                         setState(() {
-                          if(producitve >= 0) {
+                          if(producitve > 0) {
                             producitve = producitve - 1;
                           } else {
                             unproductive = unproductive + 1;
