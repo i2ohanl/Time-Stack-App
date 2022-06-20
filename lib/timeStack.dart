@@ -95,9 +95,11 @@ class TimeStackState extends State<TimeStack> {
     }
     if(producitve!=null){
     // ignore: sized_box_for_whitespace
-    print('Productive not null: '+producitve.toString());
+    print('Productive: '+producitve.toString());
     if(unproductive!=null){
-      print('unProductive not null: '+unproductive.toString());
+      print('unProductive: '+unproductive.toString());
+      print('TotalDailyNeg: '+dailyTotalNeg.toString());
+      print('TotalDailyPos: '+dailyTotalPos.toString());
     }else{
       print('unproductive null');
     }
@@ -112,16 +114,19 @@ class TimeStackState extends State<TimeStack> {
               color: Colors.white,
               child: Stack(
                 children : <Widget>[
+                  //set_________________________________________________________
                   Positioned(
                     top: height/2,
                     left: ((width*11/20)/2) - 55,
                     child: Square(color: Colors.blue.shade100, height: (dailyTotalNeg*10).toDouble(), width: 100.0,),
                   ),
+                  //set_________________________________________________________
                   Positioned(
                     top: height/2,
                     left: ((width*11/20)/2) - 55,
                     child: Square(color: Colors.blue, height: (unproductive*10).toDouble(), width: 100.0,),
                   ),
+                  //set_________________________________________________________
                   Positioned(
                     top: height/2,
                     left: ((width*11/20)/2) - 80,
@@ -135,18 +140,20 @@ class TimeStackState extends State<TimeStack> {
                   Positioned(
                     top: height/2 - 250,
                     left: ((width*11/20)/2) - 55,
-                    child: Square(color: Colors.orange[200], height: max - 100.0, width: 100.0,),
+                    child: Square(color: Colors.orange[200], height: max - (producitve*10).toDouble(), width: 100.0,),
                   ),
                   Positioned(
                    top: height/2 -250,
                    left: ((width*11/20)/2) - 55,
-                   child: const Square(color: Colors.white, height: 90.0, width: 100.0,),
+                   child: Square(color: Colors.white, height: max - (dailyTotalPos*10).toDouble(), width: 100.0,),
                   ),
+                  //set_________________________________________________________
                   Positioned(
                     top: height/2 + max,
                     left: ((width*11/20)/2) - 55,
                     child: Square(color: Colors.grey[500], height: 1.0, width: 120.0,),
                   ),
+                  //set_________________________________________________________
                   Positioned(
                     top: height/2 - max,
                     left: ((width*11/20)/2) - 55,
@@ -180,7 +187,7 @@ class TimeStackState extends State<TimeStack> {
                     child: ElevatedButton(
                       onPressed: () {
                         setState(() {
-                          if(unproductive >= 0) {
+                          if(unproductive > 0) {
                             unproductive = unproductive - 1;
                           } else {
                             producitve = producitve + 1;
