@@ -42,7 +42,7 @@ class TimeStackState extends State<TimeStack> {
     }
     setState(() {
       prevDate = prefs.getInt('prevDate');
-      if(prevDate == currDate) {
+      if(prevDate != currDate) {
         dailyTotalNeg = dailyTotalPos = unproductive = producitve = 0.0;
         prefs.setDouble('dailyTotalPos', 0.0);
         prefs.setDouble('dailyTotalNeg', 0.0);
@@ -184,7 +184,10 @@ class TimeStackState extends State<TimeStack> {
                     child: ElevatedButton(
                       onPressed: () {
                         setState(() {
-                          if(unproductive > 0) {
+                          if(unproductive == 0.5) {
+                            unproductive = 0.0;
+                            producitve = 0.5;
+                          } else if(unproductive >= 1) {
                             unproductive = unproductive - 1;
                           } else {
                             if (producitve >= 9.5) {
@@ -232,7 +235,10 @@ class TimeStackState extends State<TimeStack> {
                     child: ElevatedButton(
                       onPressed: () {
                         setState(() {
-                          if(producitve > 0) {
+                          if(producitve == 0.5) {
+                            unproductive = 0.5;
+                            producitve = 0.0;
+                          } else if(producitve >= 1) {
                             producitve = producitve - 1;
                           } else {
                             if (unproductive >= 9.5) {
