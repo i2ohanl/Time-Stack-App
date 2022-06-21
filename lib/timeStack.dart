@@ -89,15 +89,16 @@ class TimeStackState extends State<TimeStack> {
       dayDisplay = '$dayDisplay$month\n';
     }
     if(producitve!=null){
-    print('Productive: '+producitve.toString());
-    if(unproductive!=null){
-      print('unProductive: '+unproductive.toString());
-      print('TotalDailyNeg: '+dailyTotalNeg.toString());
-      print('TotalDailyPos: '+dailyTotalPos.toString());
-    }else{
-      print('unproductive null');
-    }
+    // print('Productive: '+producitve.toString());
+    // if(unproductive!=null){
+    //   print('unProductive: '+unproductive.toString());
+    //   print('TotalDailyNeg: '+dailyTotalNeg.toString());
+    //   print('TotalDailyPos: '+dailyTotalPos.toString());
+    // }else{
+    //   print('unproductive null');
+    // }
     return Scaffold(
+      // appBar: AppBar(title: Text('Hello'),),
       body: Stack(
         children: <Widget>[
           Positioned(
@@ -255,7 +256,7 @@ class TimeStackState extends State<TimeStack> {
                           setData();
                         });
                       },
-                      child: Icon(Icons.add, color: Colors.blue,),
+                      child: const Icon(Icons.add, color: Colors.blue,),
                     ),
                   ),
                   Positioned(
@@ -277,10 +278,19 @@ class TimeStackState extends State<TimeStack> {
                           setData();
                         });
                       },
-                      child: Icon(Icons.add, color: Colors.blue,),
+                      child: const Icon(Icons.add, color: Colors.blue,),
                     ),
                   ),
                 
+                  Positioned(
+                    top: 500,
+                    child: ElevatedButton(
+                      onPressed: () {
+                        Navigator.of(context).pushNamed('/historyPage');
+                      },
+                      child: const Icon(Icons.add, color: Colors.blue,),
+                    ),
+                  )
                 ],
               )
             ),
