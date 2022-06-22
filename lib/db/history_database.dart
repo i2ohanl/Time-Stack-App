@@ -63,6 +63,15 @@ CREATE TABLE $tableHistory (
     }
   }
 
+  Future<List<History>> readAllHistories() async {
+    final db = await instance.database;
+    
+    const orderBy = '${HistoryFields.date} DSC';
+    final result = await db.query(tableHistory, orderBy: orderBy);
+
+    return result.map((json) => History.fromJson(json)).toList();
+  }
+
   Future close() async {
     final db = await instance.database;
 

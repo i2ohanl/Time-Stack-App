@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:time_tracker/model/history.dart';
 
 class TimeStack extends StatefulWidget {
   const TimeStack({super.key});
@@ -23,7 +24,7 @@ class TimeStackState extends State<TimeStack> {
   // ignore: prefer_typing_uninitialized_variables
   var producitve;
   // ignore: prefer_typing_uninitialized_variables
-  var unproductive; 
+  var unproductive;
 
   //Variable initialisation function called as soon as entered into call stack
   @override
